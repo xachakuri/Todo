@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>todos</title>
+  </head>
+
+  <body>
+    <section class="todo">
+      <h1>todos</h1>
+      <input
+        class="new-todo new-todo-js"
+        placeholder="What needs to be done?"
+        autofocus
+      />
+      <input class="toggleAll toggleAll-js" id="toggleAll" type="checkbox" />
+      <label for="toggleAll"></label>
+      <ul class="todo-list todo-list-js"></ul>
+      <div id="footer_filters" class="invisible">
+        <div class="filters">
+          <p><span id="count"></span> items left</p>
+          <ul class="buttons">
+            <li>
+              <a href="#" data-filter="all" class="selected"> All </a>
+            </li>
+            <li>
+              <a href="#" data-filter="active"> Active </a>
+            </li>
+            <li>
+              <a href="#" data-filter="checked"> Completed </a>
+            </li>
+          </ul>
+          <button class="clear_task clear_task-js">Clear Completed</button>
+        </div>
+      </div>
+    </section>
+    <script src="js/main.js"></script>
+  </body>
+</html>
