@@ -33,7 +33,7 @@ const createTemplate = (item, i) => {
   return `<li class="todo-item todo-item-js todo-item-js_${i}  ${
     item.completed ? "checked" : "active"
   }">
-    <div class="view">
+  <div class="view">
     <input onclick="completeTask(${i})" type="checkbox"  class="toogle" ${
     item.completed ? "checked" : ""
   }>
@@ -56,8 +56,8 @@ const checkToggleAll = () =>
 const taskCounter = () => {
   const count = document.getElementById("count");
   let counter = 0;
-  for (let i = 0; i < todoItems.length; i++)
-    if (!todoItems[i].classList.contains("checked")) {
+  for (let item of todoItems)
+    if (!item.classList.contains("checked")) {
       counter++;
     }
   count.innerHTML = counter;
@@ -93,7 +93,6 @@ const completeTask = (i) => {
     todoItems[i].classList.remove("checked");
     todoItems[i].classList.add("active");
   }
-  fillHtmlList();
   checkToggleAll();
   updateLocal();
   taskCounter();
@@ -125,7 +124,6 @@ const deleteTask = (i) => {
   todoItems[i].remove();
   updateLocal();
   fillHtmlList();
-  taskCounter();
   checkFooter();
 };
 
@@ -136,6 +134,7 @@ const deleteCompletedTasks = () => {
       todoList.splice(i, 1);
       todoItems[i].remove();
       updateLocal();
+      fillHtmlList();
     }
   }
 };
@@ -160,7 +159,6 @@ toggleAll.addEventListener("click", (e) => {
     }
   }
   fillHtmlList();
-  taskCounter();
   updateLocal();
 });
 //Фильтр кнопок All,active,completed //
@@ -186,7 +184,7 @@ filter_btn.addEventListener("click", (event) => {
 //Добавление класса "selected" для активного "а" в кнопках фильтров //
 const buttons_a = document.querySelectorAll(".buttons li a");
 buttons_a.forEach((item) => {
-  item.addEventListener("click", (event) => {
+  item.addEventListener("click", () => {
     buttons_a.forEach((elem) => {
       elem.classList.remove("selected");
     });
