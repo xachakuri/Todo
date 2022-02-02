@@ -13,28 +13,28 @@
     <section class="todo">
       <h1>todos</h1>
       <input
-        class="new-todo new-todo-js"
+        class="new-todo"
         placeholder="What needs to be done?"
         autofocus
       />
-      <input class="toggleAll toggleAll-js" id="toggleAll" type="checkbox" />
+      <input class="toggleAll" id="toggleAll" type="checkbox" />
       <label for="toggleAll"></label>
-      <ul class="todo-list todo-list-js"></ul>
+      <ul class="todo-list"></ul>
       <div id="footer_filters" class="invisible">
         <div class="filters">
           <p><span id="count"></span> items left</p>
-          <ul class="buttons">
+          <ul class="filters_btns">
             <li>
-              <a href="#" data-filter="all" class="selected"> All </a>
+              <a href="#" class="filter_btn selected" data-filter="all"> All </a>
             </li>
             <li>
-              <a href="#" data-filter="active"> Active </a>
+              <a href="#" class="filter_btn" data-filter="active"> Active </a>
             </li>
             <li>
-              <a href="#" data-filter="checked"> Completed </a>
+              <a href="#" class="filter_btn" data-filter="checked"> Completed </a>
             </li>
           </ul>
-          <button class="clear_task clear_task-js">Clear Completed</button>
+          <button class="clear_task">Clear Completed</button>
         </div>
       </div>
     </section>

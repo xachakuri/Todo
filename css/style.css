@@ -83,7 +83,7 @@ body {
 .invisible {
   display: none;
 }
-.todo-list li {
+.todo-item {
   position: relative;
   border-bottom: 1px solid #ededed;
   background: #ffffff;
@@ -141,7 +141,7 @@ body {
   align-items: center;
   margin: 5px;
 }
-.filters li a {
+.filter_btn {
   color: inherit;
   padding: 3px 5px;
   text-decoration: none;
@@ -149,14 +149,14 @@ body {
   border-radius: 3px;
   transition: 0.3s;
 }
-.filters li a.selected {
+.selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
-.buttons {
+.filters_btns {
   list-style: none;
   display: flex;
 }
-.buttons li {
+.filters_btns li {
   margin: 2px;
 }
 .visible {
