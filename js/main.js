@@ -1,15 +1,12 @@
 const ACTIVE = "active";
 const CHECKED = "checked";
 
-
-const deskTaskInput = document.querySelector(".new-todo"); //Начальный инпут //
-const todoContainer = document.querySelector(".todo-list"); // Элемент списка ul //]
-const footerFilter = document.getElementById("footer_filters"); //Добавление футера фильтров //
+const deskTaskInput = document.querySelector(".newTodo"); //Начальный инпут //
+const todoContainer = document.querySelector(".todoList"); // Элемент списка ul //]
+const footerFilter = document.querySelector(".footerFilters"); //Добавление футера фильтров //
+const toggleCheckBox = document.querySelector(".toggleAll"); //Кнопка toggleCheckBox //
+const todoItems = document.getElementsByClassName("todoItem"); //Массив li //
 const todoList =JSON.parse(localStorage.getItem("todoList")) ?? []; // Массив задач //
-const todoItems = document.getElementsByClassName("todo-item"); //Массив li //
-const toggleAllCheckboxes = document.querySelector(".toggleAll"); //Кнопка toggleAllCheckboxes //
-const isAllToggled = JSON.parse(localStorage.getItem("toggleAllCheckboxes")); //Значение toggle (true or false) //
-toggleAllCheckboxes.checked = isAllToggled;
 
 const addItem = (description) => {
   //Создание задачи//
@@ -30,7 +27,7 @@ const addItem = (description) => {
 };
 // Создание Шаблона задачи //
 const createTemplate = (item, i) => {
-  return `<li class="todo-item   ${
+  return `<li class="todoItem   ${
     item.completed ? "checked" : "active"
   }">
   <div class="view">
@@ -46,44 +43,41 @@ const createTemplate = (item, i) => {
 // Обновление LocalStorage //
 const updateLocal = () => {
   localStorage.setItem("todoList", JSON.stringify(todoList));
-  localStorage.setItem("toggleAllCheckboxes", toggleAllCheckboxes.checked);
 };
 //Проверка массива todoList,если у всех элементов ключ completed:true,то передаст true,иначе false//
 const updateToggleAll = () => {
    if (todoList.length>0) {
-    (toggleAllCheckboxes.checked = todoList.every(({ completed }) => completed)) ;
+    (toggleCheckBox.checked = todoList.every(({ completed }) => completed)) ;
   }
   else {
-    toggleAllCheckboxes.checked= false;
+    toggleCheckBox.checked= false;
   }
 }
 
+const counterActiveTask = document.querySelector(".counterActiveTask");
 //Счетчик оставшихся активных задач //
-const setCount = () => {
-  const count = document.getElementById("count");
+const updateActiveTasksCount = () => {
   const todoNotCompleted = todoList.filter((item) => !item.completed).length;
-  count.textContent = `${todoNotCompleted}`;
+  counterActiveTask.textContent = `${todoNotCompleted}`;
 };
 //Функция для вызова и удаление футера фильтров //
-const addFooter = () => {
-  if (todoList.length > 0) {
-    footerFilter.classList.remove("invisible");
-    footerFilter.classList.add("visible");
+const updateFooter = () => {
+  if (todoList.length ) {
+    footerFilter.style.display='block'
   } else {
-    footerFilter.classList.add("invisible");
-    footerFilter.classList.remove("visible");
+    footerFilter.style.display='none'
   }
 };
 
 // Инициализация страницы и обновление массива todoList //
 const renderInitialTodos = () => {
   todoContainer.textContent = "";
-  if (todoList.length > 0 ) {
+  if (todoList.length  ) {
     todoList.forEach((item, i) => {
       todoContainer.innerHTML += createTemplate(item, i);
     });
   }
-  setCount();
+  updateActiveTasksCount();
 };
 // Выполнение задачи списка //
 const completeTask = (i) => {
@@ -95,31 +89,22 @@ const completeTask = (i) => {
     todoItems[i].classList.remove("checked");
     todoItems[i].classList.add("active");
   }
-  changeStatus();
+  updateAppState();
 };
 
 // Прослушивание инпута  на нажатие enter и добавление его в список //
 deskTaskInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter" && deskTaskInput.value != 0) {
     addItem(event.target.value);
-    changeStatus();
+    updateAppState();
   }
 });
-
-//Потеря фокуса на инпуте //
-deskTaskInput.onblur = function (e) {
-  if (deskTaskInput.value != 0) {
-    addItem(e.target.value);
-    changeStatus();
-  }
-};
-
 
 // Удаление задачи //
 const deleteTask = (i) => {
   todoList.splice(i,1)
   todoItems[i].remove();
-  changeStatus();
+  updateAppState();
   renderInitialTodos();
 };
 
@@ -127,37 +112,34 @@ const deleteTask = (i) => {
 const deleteCompletedTasks = () => {
   for (let i = todoList.length - 1; i >= 0; i--) {
     if (todoList[i].completed) {
-      todoList.splice(i, 1);
-      todoItems[i].remove();
-      changeStatus();
-      renderInitialTodos();
+     deleteTask(i);
+     updateAppState();
     }
   }
 };
-const btnClearTask = document.querySelector(".clear_task"); //кнопка удаления всех выполненных задач //
+const btnClearTask = document.querySelector(".clearTask"); //кнопка удаления всех выполненных задач //
 btnClearTask.onclick = () => {
   deleteCompletedTasks();
-  changeStatus();
 };
-//Прослушивание клика кнопки toggleAllCheckboxes для выделения всех задач (сделать выполненными либо сбросить их) //
-toggleAllCheckboxes.addEventListener("click", (e) => {
+//Прослушивание клика кнопки toggleCheckBox для выделения всех задач (сделать выполненными либо сбросить их) //
+toggleCheckBox.addEventListener("click", (e) => {
   // Меняем массив с элементами
   todoList.forEach((elem) => {
     elem.completed = e.target.checked;
   });
 
   // Меняем отображение в html
-  for (let item of todoItems) {
+  for (const item of todoItems) {
     if (e.target.checked) {
       item.classList.add("checked");
     } else {
       item.classList.remove("checked");
     }
   }
-  changeStatus();
+  updateAppState();
 });
 //Фильтр кнопок All,active,completed //
-const btnFiltersTasks = document.querySelector(".filters_btns");
+const btnFiltersTasks = document.querySelector(".filtersBtns");
 btnFiltersTasks.addEventListener("click", (event) => {
   //По клику по элементу узнаем его filterClass и дальше запускаем switch //
   const filterClass = event.target.dataset["filter"];
@@ -173,11 +155,10 @@ btnFiltersTasks.addEventListener("click", (event) => {
     default:
       todoContainer.classList.remove(CHECKED, ACTIVE);
   }
-  changeStatus();
 });
 
 //Добавление класса "selected" для активного "а" в кнопках фильтров //
-const btnFilterTask = document.querySelectorAll(".filter_btn");
+const btnFilterTask = document.querySelectorAll(".filterBtn");
 btnFilterTask.forEach((item) => {
   item.addEventListener("click", () => {
     btnFilterTask.forEach((elem) => {
@@ -191,7 +172,6 @@ btnFilterTask.forEach((item) => {
 const editTask = (i, event) => {
   const itemLabel = event.target;
   const input = document.createElement("input");
-  input.value = todoList[i].description;
   // вставляем инпут и даём ему фокус
   todoItems[i].appendChild(input);
   input.focus();
@@ -204,6 +184,7 @@ const editTask = (i, event) => {
     if (!e.target.value) {
       todoList.splice(i, 1);
       todoItems[i].remove();
+      updateAppState();
     } else {
       // удаляем поле
       todoItems[i].removeChild(input);
@@ -211,32 +192,27 @@ const editTask = (i, event) => {
       // добавляем текст в ячейку
       todoList[i].description = e.target.value;
       itemLabel.innerText = e.target.value;
+      updateLocal();
     }
-
+    renderInitialTodos();
     deskTaskInput.focus();
-
-    changeStatus();
   });
-
   input.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       deskTaskInput.focus();
-      if (!input.value.length) {
-        todoList.splice(i, 1);
-        todoItems[i].remove();
-      }
     }
   });
 };
 
-changeStatus = function() {
+updateAppState = function() {
   updateToggleAll();
   updateLocal();
-  setCount();
-  addFooter();
+  updateActiveTasksCount();
+  updateFooter();
 }
 
 window.onload = function() {
 renderInitialTodos();
-addFooter();
+updateFooter();
+updateToggleAll();
 };

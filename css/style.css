@@ -23,7 +23,7 @@ body {
   margin: 20px 0 20px 0;
   width: 100%;
 }
-.new-todo {
+.newTodo {
   padding: 16px 16px 16px 55px;
   border: none;
   background: #ffffff;
@@ -33,7 +33,7 @@ body {
   width: 100%;
   border-bottom: 1px solid #ededed;
 }
-.new-todo::placeholder {
+.newTodo::placeholder {
   color: #c0c0c0;
   opacity: 0.6;
 }
@@ -69,21 +69,18 @@ body {
   display: block;
   width: 100%;
 }
-.todo-list {
+.todoList {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.todo-list.checked .active {
+.todoList.checked .active {
   display: none;
 }
-.todo-list.active .checked {
+.todoList.active .checked {
   display: none;
 }
-.invisible {
-  display: none;
-}
-.todo-item {
+.todoItem {
   position: relative;
   border-bottom: 1px solid #ededed;
   background: #ffffff;
@@ -105,10 +102,10 @@ body {
   top: 0;
   bottom: 0;
 }
-.todo-item.checked .toogle {
+.todoItem.checked .toogle {
   background-image: url(../icons/arrow.svg);
 }
-.todo-item.checked label {
+.todoItem.checked label {
   text-decoration: line-through;
   color: #d9d9d9;
 }
@@ -141,25 +138,27 @@ body {
   align-items: center;
   margin: 5px;
 }
-.filter_btn {
+.filterBtn {
   color: inherit;
   padding: 3px 5px;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;
   transition: 0.3s;
+  background: none;
 }
 .selected {
   border-color: rgba(175, 47, 47, 0.2);
 }
-.filters_btns {
+.filtersBtns {
   list-style: none;
   display: flex;
 }
-.filters_btns li {
+.filtersBtns li {
   margin: 2px;
 }
-.visible {
+.footerFilters {
+  display: none;
   color: #777;
   padding: 10px 15px;
   text-align: center;
@@ -171,7 +170,7 @@ body {
     0 9px 1px -3px rgb(0 0 0 / 20%), 0 16px 0 -6px #f6f6f6,
     0 17px 2px -6px rgb(0 0 0 / 20%);
 }
-.clear_task {
+.clearTask {
   border: none;
   cursor: pointer;
   background: none;
@@ -186,7 +185,7 @@ body {
   box-sizing: border-box;
   margin-left: 50px;
 }
-.todo-list li.editing .view {
+.todoList .todoItem.editing .view {
   display: none;
 }
 @media (min-width: 640px) {
@@ -197,16 +196,17 @@ body {
     display: none;
     opacity: 0.6;
   }
-  .todo-list li:hover .destroy {
+  .todoList .todoItem:hover .destroy {
     display: block;
   }
   .destroy:hover {
     opacity: 1;
   }
-  .filters li a:hover {
+  .filterBtn:hover {
     border-color: rgba(175, 47, 47, 0.2);
+    cursor: pointer;
   }
-  .clear_task:hover {
+  .clearTask:hover {
     text-decoration: underline;
   }
   .edit {
