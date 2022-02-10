@@ -6,7 +6,7 @@ const todoContainer = document.querySelector(".todoList"); // Элемент с�
 const footerFilter = document.querySelector(".footerFilters"); //Добавление футера фильтров //
 const toggleCheckBox = document.querySelector(".toggleAll"); //Кнопка toggleCheckBox //
 const todoItems = document.getElementsByClassName("todoItem"); //Массив li //
-const todoList =JSON.parse(localStorage.getItem("todoList")) ?? []; // Массив задач //
+const todoList = JSON.parse(localStorage.getItem("todoList")) ?? []; // Массив задач //
 
 const addItem = (description) => {
   //Создание задачи//
@@ -15,7 +15,7 @@ const addItem = (description) => {
       description,
       completed: false,
     },
-      todoList.length
+    todoList.length
   );
   //Добавление в массив //
   todoList.push({
@@ -27,9 +27,7 @@ const addItem = (description) => {
 };
 // Создание Шаблона задачи //
 const createTemplate = (item, i) => {
-  return `<li class="todoItem   ${
-    item.completed ? "checked" : "active"
-  }">
+  return `<li class="todoItem   ${item.completed ? "checked" : "active"}">
   <div class="view">
     <input onclick="completeTask(${i})" type="checkbox"  class="toogle" ${
     item.completed ? "checked" : ""
@@ -46,13 +44,12 @@ const updateLocal = () => {
 };
 //Проверка массива todoList,если у всех элементов ключ completed:true,то передаст true,иначе false//
 const updateToggleAll = () => {
-   if (todoList.length>0) {
-    (toggleCheckBox.checked = todoList.every(({ completed }) => completed)) ;
+  if (todoList.length > 0) {
+    toggleCheckBox.checked = todoList.every(({ completed }) => completed);
+  } else {
+    toggleCheckBox.checked = false;
   }
-  else {
-    toggleCheckBox.checked= false;
-  }
-}
+};
 
 const counterActiveTask = document.querySelector(".counterActiveTask");
 //Счетчик оставшихся активных задач //
@@ -62,17 +59,17 @@ const updateActiveTasksCount = () => {
 };
 //Функция для вызова и удаление футера фильтров //
 const updateFooter = () => {
-  if (todoList.length ) {
-    footerFilter.style.display='block'
+  if (todoList.length) {
+    footerFilter.style.display = "block";
   } else {
-    footerFilter.style.display='none'
+    footerFilter.style.display = "none";
   }
 };
 
 // Инициализация страницы и обновление массива todoList //
 const renderInitialTodos = () => {
   todoContainer.textContent = "";
-  if (todoList.length  ) {
+  if (todoList.length) {
     todoList.forEach((item, i) => {
       todoContainer.innerHTML += createTemplate(item, i);
     });
@@ -102,7 +99,7 @@ deskTaskInput.addEventListener("keydown", function (event) {
 
 // Удаление задачи //
 const deleteTask = (i) => {
-  todoList.splice(i,1)
+  todoList.splice(i, 1);
   todoItems[i].remove();
   updateAppState();
   renderInitialTodos();
@@ -112,8 +109,7 @@ const deleteTask = (i) => {
 const deleteCompletedTasks = () => {
   for (let i = todoList.length - 1; i >= 0; i--) {
     if (todoList[i].completed) {
-     deleteTask(i);
-     updateAppState();
+      deleteTask(i);
     }
   }
 };
@@ -132,8 +128,10 @@ toggleCheckBox.addEventListener("click", (e) => {
   for (const item of todoItems) {
     if (e.target.checked) {
       item.classList.add("checked");
+      item.classList.remove("active");
     } else {
       item.classList.remove("checked");
+      item.classList.add("active");
     }
   }
   updateAppState();
@@ -182,9 +180,7 @@ const editTask = (i, event) => {
   //прослушиваем потерю фокуса и убирает инпту
   input.addEventListener("blur", (e) => {
     if (!e.target.value) {
-      todoList.splice(i, 1);
-      todoItems[i].remove();
-      updateAppState();
+      deleteTask(i);
     } else {
       // удаляем поле
       todoItems[i].removeChild(input);
@@ -194,7 +190,6 @@ const editTask = (i, event) => {
       itemLabel.innerText = e.target.value;
       updateLocal();
     }
-    renderInitialTodos();
     deskTaskInput.focus();
   });
   input.addEventListener("keydown", function (event) {
@@ -204,15 +199,15 @@ const editTask = (i, event) => {
   });
 };
 
-updateAppState = function() {
+updateAppState = function () {
   updateToggleAll();
   updateLocal();
   updateActiveTasksCount();
   updateFooter();
-}
+};
 
-window.onload = function() {
-renderInitialTodos();
-updateFooter();
-updateToggleAll();
+window.onload = function () {
+  renderInitialTodos();
+  updateFooter();
+  updateToggleAll();
 };
